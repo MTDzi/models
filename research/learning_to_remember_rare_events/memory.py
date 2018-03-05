@@ -173,6 +173,10 @@ class Memory(object):
     softmax_temp = max(1.0, np.log(0.2 * self.choose_k) / self.alpha)
     mask = tf.nn.softmax(hint_pool_sims[:, :choose_k - 1] * softmax_temp)
 
+    if not output_given:
+        teacher_loss = None
+        return hint_pool_mem_vals, mask, teacher_loss
+
     # prepare hints from the teacher on hint pool
     teacher_hints = tf.to_float(
         tf.abs(tf.expand_dims(intended_output, 1) - hint_pool_mem_vals))
@@ -195,6 +199,7 @@ class Memory(object):
     # prepare returned values
     nearest_neighbor = tf.to_int32(
         tf.argmax(hint_pool_sims[:, :choose_k - 1], 1))
+
     no_teacher_idxs = tf.gather(
         tf.reshape(hint_pool_idxs, [-1]),
         nearest_neighbor + choose_k * tf.range(batch_size))
