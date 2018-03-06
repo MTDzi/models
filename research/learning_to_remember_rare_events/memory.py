@@ -155,6 +155,7 @@ class Memory(object):
       hint_pool_idxs = tf.concat(
           axis=1,
           values=[hint_pool_idxs, tf.expand_dims(most_recent_hint_idx, 1)])
+          
     choose_k = tf.shape(hint_pool_idxs)[1]
 
     with tf.device(self.var_cache_device):
