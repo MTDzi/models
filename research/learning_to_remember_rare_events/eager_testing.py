@@ -20,3 +20,5 @@ batch = tf.constant(
 y = tf.constant([1, 0], dtype=tf.int32)
 
 result, mask, teacher_loss = memory.query(query_vec=batch, intended_output=None)#y)
+
+result, mask, teacher_loss = memory.query(query_vec=batch, intended_output=y)
